@@ -8,8 +8,9 @@ function Adding() {
         const taskList = document.getElementById('taskList');
         const newTask = document.createElement('li');
         newTask.innerHTML = `
-            Task: ${taskText}<br>
+            Task: <span class="task-text">${taskText}</span><br>
             Date: ${taskDate}<br>
+            <button onclick="editTask(this)">Edit</button>
             <button onclick="removeTask(this)">Delete</button>
         `;
         taskList.appendChild(newTask);
@@ -20,6 +21,16 @@ function removeTask(button) {
     const taskList = document.getElementById('taskList');
     const taskItem = button.parentElement;
     taskList.removeChild(taskItem);
+}
+
+function editTask(button) {
+    const taskItem = button.parentElement;
+    const taskTextElement = taskItem.querySelector('.task-text');
+    const newText = prompt('Edit the task:', taskTextElement.textContent);
+    
+    if (newText !== null) {
+        taskTextElement.textContent = newText;
+    }
 }
 
 function clearInputs() {
