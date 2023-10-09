@@ -1,5 +1,3 @@
-// index.js
-
 function Adding() {
     const taskInput = document.getElementById('task');
     const dateInput = document.getElementById('date');
