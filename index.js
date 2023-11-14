@@ -1,26 +1,57 @@
 function Adding() {
     const taskInput = document.getElementById('task');
     const dateInput = document.getElementById('date');
+    const colorPicker = document.getElementById('colorPicker');
     const taskText = taskInput.value.trim();
     const taskDate = dateInput.value;
+    const taskColor = colorPicker.value;
 
-    if (taskText !== '' && taskDate !== '') {
+    // Check if the date is not empty and is in the future
+    if (taskText !== '' && (!taskDate || new Date(taskDate) >= new Date())) {
         const taskList = document.getElementById('taskList');
         const newTask = document.createElement('li');
         newTask.innerHTML = `
-            Task: <span class="task-text">${taskText}</span><br>
-            Date: ${taskDate}<br>
+            <input type="checkbox" onchange="toggleTask(this)">
+            <span class="task-text" style="color: ${taskColor};">${taskText}</span><br>
+            ${taskDate !== '' ? `Date: ${taskDate}<br>` : ''}
             <button onclick="editTask(this)">Edit</button>
             <button onclick="removeTask(this)">Delete</button>
+            <ul id="subtasks"></ul>
         `;
         taskList.appendChild(newTask);
+        clearInputs();
+    } else if (taskDate && new Date(taskDate) < new Date()) {
+        alert('Please select a future date.');
+    }
+}
+
+function toggleTask(checkbox) {
+    const taskTextElement = checkbox.parentElement.querySelector('.task-text');
+    taskTextElement.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+    
+    if (checkbox.checked) {
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        confirmationMessage.innerText = 'You Have Completed The Task :)';
+        // Add celebratory animations or sounds here if desired
+        setTimeout(() => {
+            confirmationMessage.innerText = '';
+        }, 5000); // Display for 5 seconds
     }
 }
 
 function removeTask(button) {
     const taskList = document.getElementById('taskList');
     const taskItem = button.parentElement;
+    const taskTextElement = taskItem.querySelector('.task-text');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    
     taskList.removeChild(taskItem);
+
+    // Show a "Congratulations" message when a task is deleted
+    confirmationMessage.innerText = `Congratulations! Task "${taskTextElement.textContent}" has been deleted.`;
+    setTimeout(() => {
+        confirmationMessage.innerText = '';
+    }, 5000); // Display for 5 seconds
 }
 
 function editTask(button) {
@@ -39,3 +70,4 @@ function clearInputs() {
     taskInput.value = '';
     dateInput.value = '';
 }
+
